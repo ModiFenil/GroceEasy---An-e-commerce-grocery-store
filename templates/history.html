@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #5A20CB; /* Purple Color */
+            padding: 10px 15px; /* Reduced padding */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Box shadow */
+            font-size: 18px; /* Adjusted font size */
+        }
+        .navbar .brand {
+            font-size: 20px; /* Reduced brand font size */
+            font-weight: bold; /* Brand font weight */
+            color: #fff; /* Brand text color */
+            text-decoration: none; /* Remove underline */
+        }
+        .navbar-links {
+            display: flex; /* Flexbox for navigation links */
+        }
+        .navbar-links a {
+            color: white; /* Link text color */
+            text-align: center; /* Center text */
+            padding: 12px 20px; /* Reduced padding for links */
+            text-decoration: none; /* Remove underline */
+            transition: background-color 0.3s, color 0.3s; /* Smooth transitions */
+        }
+        .navbar-links a:hover {
+            background-color: rgba(255, 255, 255, 0.3); /* Hover background color */
+            color: #333; /* Hover text color */
+        }
+        .content {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            background-color: #fafafa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        li:last-child {
+            border-bottom: none;
+        }
+        .total-amount {
+            font-weight: bold;
+            font-size: 18px;
+            color: #5A20CB;
+            margin-top: 10px;
+        }
+        .item-details {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+        .item-details .item {
+            margin-bottom: 5px;
+        }
+        .item-details .item span {
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="{{ url_for('home') }}" class="brand">GroceEasy</a>
+        <div class="navbar-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('products') }}">Products</a>
+            <a href="{{ url_for('cart') }}">Cart</a>
+            <a href="{{ url_for('checkout') }}">Checkout</a>
+            <a href="{{ url_for('purchase_history') }}">Order History</a>
+            <a href="{{ url_for('user') }}">Profile</a>
+        </div>
+    </div>
+    <div class="content">
+        <h1>Order History</h1>
+        {% if orders %}
+            <ul>
+                {% for order in orders %}
+                    <li>
+                        <strong>Order ID:</strong> {{ order['_id'] }}<br>
+                        <strong>Date:</strong> {{ order['order_date'].strftime('%Y-%m-%d %H:%M:%S') }}<br>
+                        <strong>Items:</strong>
+                        <div class="item-details">
+                            {% for item in order['items'] %}
+                                <div class="item">
+                                    {{ item['name'] }} - Rs. {{ item['price'] }} 
+                                    <span>(Quantity: {{ item['quantity'] | default(1) }})</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <strong>Total:</strong> <span class="total-amount">Rs. {{ order['total_amount'] }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No orders found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

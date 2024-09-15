@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        .order-details {
+            margin-top: 20px;
+        }
+        .order-item {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .price {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .total {
+            text-align: right;
+            font-size: 22px;
+            margin-top: 30px;
+            font-weight: bold;
+            color: #333;
+        }
+        .return-home {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #dc3545;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .return-home:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .return-home:active {
+            background-color: #004494;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Payment Successful!</h2>
+        <p>Your order ID is <strong>{{ order_id }}</strong>.</p>
+        <p>Thank you for your purchase! Here are the details of your order:</p>
+
+        <div class="order-details">
+            {% for item in items %}
+            <div class="order-item">
+                <strong>{{ item.name }}</strong><br>
+                Description: {{ item.description }}<br>
+                Price: ₹{{ item.price }}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="total">
+            Total Amount: ₹{{ total_amount }}
+        </div>
+
+        <a href="{{ url_for('home') }}" class="return-home">Return to Home</a>
+    </div>
+</body>
+</html>

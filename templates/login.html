@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('/static/images/login_back1.jpg') no-repeat center center;
+            background-size: cover;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #66BB6A; /* Fallback background color */
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            padding: 50px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Increased shadow for emphasis */
+            width: 450px; /* Adjusted width */
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 28px; /* Increased font size */
+            font-weight: 600;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 14px; /* Increased padding */
+            margin: 12px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 18px; /* Increased font size */
+        }
+        button {
+            width: 100%;
+            padding: 14px; /* Increased padding */
+            background-color: #e91e63; /* Dark Pink Background */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px; /* Increased font size */
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #c2185b; /* Slightly darker dark pink */
+        }
+        p {
+            margin-top: 15px;
+            font-size: 16px; /* Increased font size */
+        }
+        a {
+            color: #e91e63; /* Dark Pink */
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .flash-message {
+            color: #dc3545; /* Bootstrap danger color for errors */
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 16px; /* Increased font size */
+        }
+        .forgot-password {
+            display: block;
+            margin-top: 15px;
+            color: #666;
+            font-size: 16px; /* Increased font size */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .forgot-password:hover {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-message">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up here</a></p>
+    </div>
+</body>
+</html>

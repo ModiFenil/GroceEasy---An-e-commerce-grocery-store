@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('/static/images/login_back1.jpg') no-repeat center center;
+            background-size: cover;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #66BB6A; /* Fallback background color */
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            padding: 50px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Increased shadow for emphasis */
+            width: 450px; /* Adjusted width */
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 28px; /* Increased font size */
+            font-weight: 600;
+        }
+        input[type="text"], input[type="password"], input[type="email"], input[type="tel"] {
+            width: 100%;
+            padding: 14px; /* Increased padding */
+            margin: 12px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 18px; /* Increased font size */
+        }
+        input[type="file"] {
+            margin: 12px 0;
+        }
+        button {
+            width: 100%;
+            padding: 14px; /* Increased padding */
+            background-color: #e91e63; /* Dark Pink Background */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px; /* Increased font size */
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #c2185b; /* Slightly darker dark pink */
+        }
+        .flash-messages {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+        .flash-messages li {
+            padding: 10px;
+            border-radius: 8px;
+            background: #dc3545; /* Red background for errors */
+            color: #fff;
+            font-size: 16px;
+        }
+        p {
+            margin-top: 15px;
+            font-size: 16px; /* Increased font size */
+            color: #666; /* Light Gray Text */
+        }
+        a {
+            color: #e91e63; /* Dark Pink */
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sign Up</h2>
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                <ul class="flash-messages">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <form method="POST" enctype="multipart/form-data">
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <input type="email" name="email" placeholder="Email" required><br>
+            <input type="tel" name="phone" placeholder="Phone Number" required><br>
+            <input type="file" name="profile_picture" accept="image/*"><br>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+    </div>
+</body>
+</html>

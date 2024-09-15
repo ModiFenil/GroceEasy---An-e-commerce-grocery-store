@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <style>
+        /* Global Styles */
+/* Global Styles */
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+        background-color: #5A20CB; /* Purple Color */
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 18px;
+    }
+    .navbar a:hover {
+        text-decoration: underline;
+    }
+    .brand {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    /* Container and Product Page Styles */
+    .container {
+        display: flex;
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        position: relative;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Fixed width for sidebar */
+    .sidebar {
+        width: 200px; /* Fixed width */
+        background-color: #444; /* Darker background */
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        position: sticky;
+        top: 20px;
+        height: fit-content;
+        flex-shrink: 0; /* Prevent shrinking */
+    }
+
+    .sidebar h2 {
+        text-align: center;
+        color: #fff;
+        margin-top: 0;
+        font-size: 22px;
+    }
+
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar ul li {
+        padding: 15px;
+        cursor: pointer;
+        background-color: #555;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        text-align: center;
+        transition: background-color 0.3s;
+    }
+
+    .sidebar ul li:hover {
+        background-color: #666;
+    }
+
+    .sidebar ul li i {
+        margin-right: 8px; /* Icon margin */
+    }
+
+    .content {
+        flex-grow: 1;
+        margin-left: 20px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 4 columns per row */
+        gap: 20px; /* Adjust spacing between items if needed */
+    }
+
+    .product {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .product:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .product img {
+        width: 100%; /* Full width */
+        height: 200px; /* Fixed height */
+        object-fit: cover; /* Crop or scale the image */
+        border-radius: 8px;
+    }
+
+    .product h3 {
+        margin: 15px 0;
+        font-size: 20px;
+        color: #333;
+    }
+
+    .product p {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .product .price {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 10px 0;
+        color: #28a745;
+    }
+
+    .product button {
+        padding: 12px 24px;
+        background-color: #5A20CB; /* Match Navbar Color */
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .product button:hover {
+        background-color: #784BA0;
+        transform: scale(1.05);
+    }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="brand">GroceEasy</div>
+        <div>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('products') }}">Products</a>
+            <a href="{{ url_for('cart') }}">Cart</a>
+            <a href="{{ url_for('checkout') }}">Checkout</a>
+            <a href="{{ url_for('user') }}">Profile</a>
+        </div>
+    </div>
+    <div class="container">
+        <!-- Sidebar for categories -->
+        <div class="sidebar">
+            <h2>Categories</h2>
+            <ul>
+                <li onclick="filterProducts('all')">All</li>
+                <li onclick="filterProducts('drinks')">Drinks</li>
+                <li onclick="filterProducts('fruits')">Fruits</li>
+                <li onclick="filterProducts('vegetables')">Vegetables</li>
+                <li onclick="filterProducts('dairy')">Dairy</li>
+                <li onclick="filterProducts('snacks')">Snacks</li>
+                <li onclick="filterProducts('bakery')">Bakery</li>
+                <li onclick="filterProducts('canned')">Canned Goods</li>
+                <li onclick="filterProducts('frozen')">Frozen Foods</li>
+                <li onclick="filterProducts('beverages')">Beverages</li>
+            </ul>
+        </div>
+
+        <!-- Content area for products -->
+        <div class="content">
+            <div class="product-grid">
+                <!-- Products for Drinks Category -->
+                <div class="product" data-category="drinks">
+                    <img src="{{ url_for('static', filename='images/drink1.jpg') }}" alt="Masala Chai">
+                    <h3>Masala Chai</h3>
+                    <p>Spiced Indian tea with aromatic spices.</p>
+                    <div class="price">Rs. 50</div>
+                    <button onclick="addToCart('Masala Chai', 50)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="drinks">
+                    <img src="{{ url_for('static', filename='images/drink2.jpg') }}" alt="Lassi">
+                    <h3>Lassi</h3>
+                    <p>A refreshing yogurt-based drink, sweet or salted.</p>
+                    <div class="price">Rs. 60</div>
+                    <button onclick="addToCart('Lassi', 60)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="drinks">
+                    <img src="{{ url_for('static', filename='images/drink3.jpg') }}" alt="Thandai">
+                    <h3>Thandai</h3>
+                    <p>A traditional North Indian drink with a blend of spices and nuts.</p>
+                    <div class="price">Rs. 80</div>
+                    <button onclick="addToCart('Thandai', 80)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="drinks">
+                    <img src="{{ url_for('static', filename='images/drink4.jpg') }}" alt="Jaljeera">
+                    <h3>Jaljeera</h3>
+                    <p>A tangy and spicy drink made with cumin and spices.</p>
+                    <div class="price">Rs. 50</div>
+                    <button onclick="addToCart('Jaljeera', 50)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="drinks">
+                    <img src="{{ url_for('static', filename='images/drink5.jpg') }}" alt="Paan Shot">
+                    <h3>Paan Shot</h3>
+                    <p>A refreshing drink with the flavor of betel leaves.</p>
+                    <div class="price">Rs. 65</div>
+                    <button onclick="addToCart('Paan Shot', 65)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="drinks">
+                    <img src="{{ url_for('static', filename='images/drink6.jpg') }}" alt="Buttermilk">
+                    <h3>Buttermilk</h3>
+                    <p>A cool and savory drink made from curd.</p>
+                    <div class="price">Rs. 55</div>
+                    <button onclick="addToCart('Buttermilk', 55)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="drinks">
+                    <img src="{{ url_for('static', filename='images/drink7.jpg') }}" alt="Sattu Drink">
+                    <h3>Sattu Drink</h3>
+                    <p>A nutritious drink made from roasted gram flour.</p>
+                    <div class="price">Rs. 70</div>
+                    <button onclick="addToCart('Sattu Drink', 70)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="drinks">
+                    <img src="{{ url_for('static', filename='images/drink8.jpg') }}" alt="Aloe Vera Juice">
+                    <h3>Aloe Vera Juice</h3>
+                    <p>A health drink made from aloe vera extract.</p>
+                    <div class="price">Rs. 85</div>
+                    <button onclick="addToCart('Aloe Vera Juice', 85)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="drinks">
+                    <img src="{{ url_for('static', filename='images/drink9.jpg') }}" alt="Ginger Lemon Tea">
+                    <h3>Ginger Lemon Tea</h3>
+                    <p>A soothing tea with ginger and lemon.</p>
+                    <div class="price">Rs. 55</div>
+                    <button onclick="addToCart('Ginger Lemon Tea', 55)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="drinks">
+                    <img src="{{ url_for('static', filename='images/drink10.jpg') }}" alt="Khus Sharbat">
+                    <h3>Khus Sharbat</h3>
+                    <p>A cooling drink made from khus grass extract.</p>
+                    <div class="price">Rs. 60</div>
+                    <button onclick="addToCart('Khus Sharbat', 60)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="drinks">
+                    <img src="{{ url_for('static', filename='images/drink11.jpg') }}" alt="Rose Milk">
+                    <h3>Rose Milk</h3>
+                    <p>A sweet and fragrant drink made with rose essence.</p>
+                    <div class="price">Rs. 75</div>
+                    <button onclick="addToCart('Rose Milk', 75)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="drinks">
+                    <img src="{{ url_for('static', filename='images/drink12.jpg') }}" alt="Kokum Sarbat">
+                    <h3>Kokum Sarbat</h3>
+                    <p>A refreshing drink made from kokum fruit.</p>
+                    <div class="price">Rs. 75</div>
+                    <button onclick="addToCart('Kokum Sarbat', 75)">Add to Cart</button>
+                </div>
+                                
+                <!-- Add 10 more products for the drinks category here -->
+
+                <!-- Products for Fruits Category -->
+                <div class="product" data-category="fruits">
+                    <img src="{{ url_for('static', filename='images/fruit1.jpg') }}" alt="Apple">
+                    <h3>Fresh Apple </h3>
+                    <p>Juicy and fresh apple.</p>
+                    <div class="price">Rs. 30</div>
+                    <button onclick="addToCart('Fresh Apple ', 30)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="fruits">
+                    <img src="{{ url_for('static', filename='images/fruit2.jpg') }}" alt="Banana">
+                    <h3>Ripe Banana</h3>
+                    <p>Sweet and soft ripe bananas.</p>
+                    <div class="price">Rs. 20</div>
+                    <button onclick="addToCart('Ripe Banana', 20)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="fruits">
+                    <img src="{{ url_for('static', filename='images/fruit3.jpg') }}" alt="Mango">
+                    <h3>Alphonso Mango</h3>
+                    <p>Sweet and juicy Alphonso mangoes.</p>
+                    <div class="price">Rs. 100</div>
+                    <button onclick="addToCart('Alphonso Mango', 100)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="fruits">
+                    <img src="{{ url_for('static', filename='images/fruit4.jpg') }}" alt="Orange">
+                    <h3>Fresh Orange</h3>
+                    <p>Citrusy and juicy oranges.</p>
+                    <div class="price">Rs. 40</div>
+                    <button onclick="addToCart('Fresh Orange', 40)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="fruits">
+                    <img src="{{ url_for('static', filename='images/fruit5.jpg') }}" alt="Grapes">
+                    <h3>Green Grapes</h3>
+                    <p>Sweet and crunchy green grapes.</p>
+                    <div class="price">Rs. 60</div>
+                    <button onclick="addToCart('Green Grapes', 60)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="fruits">
+                    <img src="{{ url_for('static', filename='images/fruit6.jpg') }}" alt="Pineapple">
+                    <h3>Fresh Pineapple</h3>
+                    <p>Tropical and tangy pineapple.</p>
+                    <div class="price">Rs. 80</div>
+                    <button onclick="addToCart('Fresh Pineapple', 80)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="fruits">
+                    <img src="{{ url_for('static', filename='images/fruit7.jpg') }}" alt="Strawberry">
+                    <h3>Juicy Strawberries</h3>
+                    <p>Sweet and juicy strawberries.</p>
+                    <div class="price">Rs. 90</div>
+                    <button onclick="addToCart('Juicy Strawberries', 90)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="fruits">
+                    <img src="{{ url_for('static', filename='images/fruit8.jpg') }}" alt="Papaya">
+                    <h3>Ripe Papaya</h3>
+                    <p>Sweet and juicy papayas.</p>
+                    <div class="price">Rs. 70</div>
+                    <button onclick="addToCart('Ripe Papaya', 70)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="fruits">
+                    <img src="{{ url_for('static', filename='images/fruit9.jpg') }}" alt="Watermelon">
+                    <h3>Watermelon</h3>
+                    <p>Refreshing and hydrating watermelon.</p>
+                    <div class="price">Rs. 90</div>
+                    <button onclick="addToCart('Watermelon', 90)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="fruits">
+                    <img src="{{ url_for('static', filename='images/fruit10.jpg') }}" alt="Pomegranate">
+                    <h3>Fresh Pomegranate</h3>
+                    <p>Sweet and tangy pomegranate.</p>
+                    <div class="price">Rs. 100</div>
+                    <button onclick="addToCart('Fresh Pomegranate', 100)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="fruits">
+                    <img src="{{ url_for('static', filename='images/fruit11.jpg') }}" alt="Peach">
+                    <h3>Juicy Peach</h3>
+                    <p>Sweet and fuzzy peaches.</p>
+                    <div class="price">Rs. 75</div>
+                    <button onclick="addToCart('Juicy Peach', 75)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="fruits">
+                    <img src="{{ url_for('static', filename='images/fruit12.jpg') }}" alt="Cherry">
+                    <h3>Sweet Cherries</h3>
+                    <p>Delicious and juicy cherries.</p>
+                    <div class="price">Rs. 120</div>
+                    <button onclick="addToCart('Sweet Cherries', 120)">Add to Cart</button>
+                </div>
+                
+                <!-- Add 10 more products for the fruits category here -->
+
+                <!-- Products for Vegetables Category -->
+                <div class="product" data-category="vegetables">
+                    <img src="{{ url_for('static', filename='images/veg1.jpg') }}" alt="Carrot">
+                    <h3>Carrot</h3>
+                    <p>Fresh and healthy carrot.</p>
+                    <div class="price">Rs. 20</div>
+                    <button onclick="addToCart('Carrot', 20)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="vegetables">
+                    <img src="{{ url_for('static', filename='images/veg2.jpg') }}" alt="Broccoli">
+                    <h3>Broccoli</h3>
+                    <p>Green and nutritious broccoli.</p>
+                    <div class="price">Rs. 40</div>
+                    <button onclick="addToCart('Broccoli', 40)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="vegetables">
+                    <img src="{{ url_for('static', filename='images/veg3.jpg') }}" alt="Tomato">
+                    <h3>Tomato</h3>
+                    <p>Juicy and ripe tomatoes.</p>
+                    <div class="price">Rs. 25</div>
+                    <button onclick="addToCart('Tomato', 25)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="vegetables">
+                    <img src="{{ url_for('static', filename='images/veg4.jpg') }}" alt="Cucumber">
+                    <h3>Cucumber</h3>
+                    <p>Fresh and crunchy cucumber.</p>
+                    <div class="price">Rs. 15</div>
+                    <button onclick="addToCart('Cucumber', 15)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="vegetables">
+                    <img src="{{ url_for('static', filename='images/veg5.jpg') }}" alt="Spinach">
+                    <h3>Spinach</h3>
+                    <p>Fresh and leafy spinach.</p>
+                    <div class="price">Rs. 30</div>
+                    <button onclick="addToCart('Spinach', 30)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="vegetables">
+                    <img src="{{ url_for('static', filename='images/veg6.jpg') }}" alt="Potato">
+                    <h3>Potato</h3>
+                    <p>Versatile and starchy potatoes.</p>
+                    <div class="price">Rs. 22</div>
+                    <button onclick="addToCart('Potato', 22)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="vegetables">
+                    <img src="{{ url_for('static', filename='images/veg7.jpg') }}" alt="Onion">
+                    <h3>Onion</h3>
+                    <p>Pungent and flavorful onions.</p>
+                    <div class="price">Rs. 20</div>
+                    <button onclick="addToCart('Onion', 20)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="vegetables">
+                    <img src="{{ url_for('static', filename='images/veg8.jpg') }}" alt="Bell Pepper">
+                    <h3>Bell Pepper</h3>
+                    <p>Colorful and crunchy bell peppers.</p>
+                    <div class="price">Rs. 50</div>
+                    <button onclick="addToCart('Bell Pepper', 50)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="vegetables">
+                    <img src="{{ url_for('static', filename='images/veg9.jpg') }}" alt="Cauliflower">
+                    <h3>Cauliflower</h3>
+                    <p>White and tender cauliflower.</p>
+                    <div class="price">Rs. 35</div>
+                    <button onclick="addToCart('Cauliflower', 35)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="vegetables">
+                    <img src="{{ url_for('static', filename='images/veg10.jpg') }}" alt="Eggplant">
+                    <h3>Eggplant</h3>
+                    <p>Smooth and glossy eggplants.</p>
+                    <div class="price">Rs. 40</div>
+                    <button onclick="addToCart('Eggplant', 40)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="vegetables">
+                    <img src="{{ url_for('static', filename='images/veg11.jpg') }}" alt="Beetroot">
+                    <h3>Beetroot</h3>
+                    <p>Sweet and earthy beetroot.</p>
+                    <div class="price">Rs. 30</div>
+                    <button onclick="addToCart('Beetroot', 30)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="vegetables">
+                    <img src="{{ url_for('static', filename='images/veg12.jpg') }}" alt="Green Beans">
+                    <h3>Green Beans</h3>
+                    <p>Fresh and crispy green beans.</p>
+                    <div class="price">Rs. 25</div>
+                    <button onclick="addToCart('Green Beans', 25)">Add to Cart</button>
+                </div>
+                
+                
+                <!-- Add 10 more products for the vegetables category here -->
+
+                <!-- Products for Dairy Category -->
+                <div class="product" data-category="dairy">
+                    <img src="{{ url_for('static', filename='images/dairy1.jpg') }}" alt="Milk">
+                    <h3>Amul Milk </h3>
+                    <p>Fresh and creamy Amul milk.</p>
+                    <div class="price">Rs. 50</div>
+                    <button onclick="addToCart('Amul Milk ', 50)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="dairy">
+                    <img src="{{ url_for('static', filename='images/dairy2.jpg') }}" alt="Butter">
+                    <h3>Amul Butter</h3>
+                    <p>Rich and creamy Amul butter.</p>
+                    <div class="price">Rs. 45</div>
+                    <button onclick="addToCart('Amul Butter', 45)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="dairy">
+                    <img src="{{ url_for('static', filename='images/dairy3.jpg') }}" alt="Cheese">
+                    <h3>Amul Cheese</h3>
+                    <p>Delicious Amul cheese.</p>
+                    <div class="price">Rs. 90</div>
+                    <button onclick="addToCart('Amul Cheese', 90)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="dairy">
+                    <img src="{{ url_for('static', filename='images/dairy4.jpg') }}" alt="Paneer">
+                    <h3>Amul Paneer</h3>
+                    <p>Soft and fresh Amul paneer.</p>
+                    <div class="price">Rs. 80</div>
+                    <button onclick="addToCart('Amul Paneer', 80)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="dairy">
+                    <img src="{{ url_for('static', filename='images/dairy5.jpg') }}" alt="Curd">
+                    <h3>Amul Curd</h3>
+                    <p>Thick and creamy Amul curd.</p>
+                    <div class="price">Rs. 30</div>
+                    <button onclick="addToCart('Amul Curd', 30)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="dairy">
+                    <img src="{{ url_for('static', filename='images/dairy6.jpg') }}" alt="Ghee">
+                    <h3>Amul Ghee</h3>
+                    <p>Pure and aromatic Amul ghee.</p>
+                    <div class="price">Rs. 120</div>
+                    <button onclick="addToCart('Amul Ghee', 120)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="dairy">
+                    <img src="{{ url_for('static', filename='images/dairy7.jpg') }}" alt="Dahi">
+                    <h3>Amul Dahi</h3>
+                    <p>Fresh and thick Amul dahi.</p>
+                    <div class="price">Rs. 40</div>
+                    <button onclick="addToCart('Amul Dahi', 40)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="dairy">
+                    <img src="{{ url_for('static', filename='images/dairy8.jpg') }}" alt="Lassi">
+                    <h3>Amul Lassi</h3>
+                    <p>Refreshing Amul lassi.</p>
+                    <div class="price">Rs. 25</div>
+                    <button onclick="addToCart('Amul Lassi', 25)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="dairy">
+                    <img src="{{ url_for('static', filename='images/dairy9.jpg') }}" alt="Ice Cream">
+                    <h3>Amul Ice Cream</h3>
+                    <p>Creamy and delicious Amul ice cream.</p>
+                    <div class="price">Rs. 60</div>
+                    <button onclick="addToCart('Amul Ice Cream', 60)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="dairy">
+                    <img src="{{ url_for('static', filename='images/dairy10.jpg') }}" alt="Buttermilk">
+                    <h3>Amul Buttermilk</h3>
+                    <p>Refreshing Amul buttermilk.</p>
+                    <div class="price">Rs. 20</div>
+                    <button onclick="addToCart('Amul Buttermilk', 20)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="dairy">
+                    <img src="{{ url_for('static', filename='images/dairy11.jpg') }}" alt="Amul Mithai Mate">
+                    <h3>Amul Mithai Mate</h3>
+                    <p>Sweetened condensed milk by Amul.</p>
+                    <div class="price">Rs. 75</div>
+                    <button onclick="addToCart('Amul Mithai Mate', 75)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="dairy">
+                    <img src="{{ url_for('static', filename='images/dairy12.jpg') }}" alt="Amul Chocolate">
+                    <h3>Amul Chocolate</h3>
+                    <p>Rich and creamy Amul chocolate.</p>
+                    <div class="price">Rs. 100</div>
+                    <button onclick="addToCart('Amul Chocolate', 100)">Add to Cart</button>
+                </div>
+                
+                
+                <!-- Add 10 more products for the dairy category here -->
+
+                <!-- Products for Snacks Category -->
+                <div class="product" data-category="snacks">
+                    <img src="{{ url_for('static', filename='images/snack1.jpg') }}" alt="Kurkure Masala Munch">
+                    <h3>Kurkure Masala Munch</h3>
+                    <p>Spicy and crunchy snack by Kurkure.</p>
+                    <div class="price">Rs. 20</div>
+                    <button onclick="addToCart('Kurkure Masala Munch', 20)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="snacks">
+                    <img src="{{ url_for('static', filename='images/snack2.jpg') }}" alt="Kurkure Puffcorn">
+                    <h3>Kurkure Puffcorn</h3>
+                    <p>Light and puffy snack by Kurkure.</p>
+                    <div class="price">Rs. 15</div>
+                    <button onclick="addToCart('Kurkure Puffcorn', 15)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="snacks">
+                    <img src="{{ url_for('static', filename='images/snack3.jpg') }}" alt="Balaji Wafers Masala Masti">
+                    <h3>Balaji Wafers Masala Masti</h3>
+                    <p>Tangy masala flavored wafers by Balaji.</p>
+                    <div class="price">Rs. 30</div>
+                    <button onclick="addToCart('Balaji Wafers Masala Masti', 30)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="snacks">
+                    <img src="{{ url_for('static', filename='images/snack4.jpg') }}" alt="Balaji Wafers Simply Salted">
+                    <h3>Balaji Wafers Simply Salted</h3>
+                    <p>Classic salted wafers by Balaji.</p>
+                    <div class="price">Rs. 25</div>
+                    <button onclick="addToCart('Balaji Wafers Simply Salted', 25)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="snacks">
+                    <img src="{{ url_for('static', filename='images/snack5.jpg') }}" alt="Haldiram's Aloo Bhujia">
+                    <h3>Haldiram's Aloo Bhujia</h3>
+                    <p>Spicy and crispy aloo bhujia by Haldiram's.</p>
+                    <div class="price">Rs. 35</div>
+                    <button onclick="addToCart('Haldiram\'s Aloo Bhujia', 35)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="snacks">
+                    <img src="{{ url_for('static', filename='images/snack6.jpg') }}" alt="Haldiram's Khatta Meetha">
+                    <h3>Haldiram's Khatta Meetha</h3>
+                    <p>Sweet and tangy mixture by Haldiram's.</p>
+                    <div class="price">Rs. 40</div>
+                    <button onclick="addToCart('Haldiram\'s Khatta Meetha', 40)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="snacks">
+                    <img src="{{ url_for('static', filename='images/snack7.jpg') }}" alt="Kurkure Green Chutney Rajasthani Style">
+                    <h3>Kurkure Green Chutney Rajasthani Style</h3>
+                    <p>Unique green chutney flavored snack by Kurkure.</p>
+                    <div class="price">Rs. 20</div>
+                    <button onclick="addToCart('Kurkure Green Chutney Rajasthani Style', 20)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="snacks">
+                    <img src="{{ url_for('static', filename='images/snack8.jpg') }}" alt="Balaji Wafers Tomato Masti">
+                    <h3>Balaji Wafers Tomato Masti</h3>
+                    <p>Tomato flavored crispy wafers by Balaji.</p>
+                    <div class="price">Rs. 30</div>
+                    <button onclick="addToCart('Balaji Wafers Tomato Masti', 30)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="snacks">
+                    <img src="{{ url_for('static', filename='images/snack9.jpg') }}" alt="Haldiram's Moong Dal">
+                    <h3>Haldiram's Moong Dal</h3>
+                    <p>Crispy fried moong dal snack by Haldiram's.</p>
+                    <div class="price">Rs. 25</div>
+                    <button onclick="addToCart('Haldiram\'s Moong Dal', 25)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="snacks">
+                    <img src="{{ url_for('static', filename='images/snack10.jpg') }}" alt="Kurkure Chilli Chatka">
+                    <h3>Kurkure Chilli Chatka</h3>
+                    <p>Spicy chili flavored Kurkure snack.</p>
+                    <div class="price">Rs. 20</div>
+                    <button onclick="addToCart('Kurkure Chilli Chatka', 20)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="snacks">
+                    <img src="{{ url_for('static', filename='images/snack11.jpg') }}" alt="Balaji Wafers Peri Peri">
+                    <h3>Balaji Wafers Peri Peri</h3>
+                    <p>Peri Peri flavored spicy wafers by Balaji.</p>
+                    <div class="price">Rs. 35</div>
+                    <button onclick="addToCart('Balaji Wafers Peri Peri', 35)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="snacks">
+                    <img src="{{ url_for('static', filename='images/snack12.jpg') }}" alt="Haldiram's Navratan Mix">
+                    <h3>Haldiram's Navratan Mix</h3>
+                    <p>Rich and spicy Navratan mix by Haldiram's.</p>
+                    <div class="price">Rs. 50</div>
+                    <button onclick="addToCart('Haldiram\'s Navratan Mix', 50)">Add to Cart</button>
+                </div>
+                
+                <!-- Add 10 more products for the snacks category here -->
+
+                <!-- Products for Bakery Category -->
+                <div class="product" data-category="bakery">
+                    <img src="{{ url_for('static', filename='images/bakery1.jpg') }}" alt="Chocolate Cake">
+                    <h3>Chocolate Cake</h3>
+                    <p>Rich and creamy chocolate cake.</p>
+                    <div class="price">Rs. 250</div>
+                    <button onclick="addToCart('Chocolate Cake', 250)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="bakery">
+                    <img src="{{ url_for('static', filename='images/bakery2.jpg') }}" alt="Vanilla Cupcake">
+                    <h3>Vanilla Cupcake</h3>
+                    <p>Fluffy and sweet vanilla cupcake.</p>
+                    <div class="price">Rs. 60</div>
+                    <button onclick="addToCart('Vanilla Cupcake', 60)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="bakery">
+                    <img src="{{ url_for('static', filename='images/bakery3.jpg') }}" alt="Red Velvet Cake">
+                    <h3>Red Velvet Cake</h3>
+                    <p>Classic red velvet cake with cream cheese frosting.</p>
+                    <div class="price">Rs. 300</div>
+                    <button onclick="addToCart('Red Velvet Cake', 300)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="bakery">
+                    <img src="{{ url_for('static', filename='images/bakery4.jpg') }}" alt="Multigrain Bread">
+                    <h3>Multigrain Bread</h3>
+                    <p>Healthy and fresh multigrain bread.</p>
+                    <div class="price">Rs. 50</div>
+                    <button onclick="addToCart('Multigrain Bread', 50)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="bakery">
+                    <img src="{{ url_for('static', filename='images/bakery5.jpg') }}" alt="Butter Cookies">
+                    <h3>Butter Cookies</h3>
+                    <p>Delicious and crumbly butter cookies.</p>
+                    <div class="price">Rs. 150</div>
+                    <button onclick="addToCart('Butter Cookies', 150)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="bakery">
+                    <img src="{{ url_for('static', filename='images/bakery6.jpg') }}" alt="Garlic Bread">
+                    <h3>Garlic Bread</h3>
+                    <p>Freshly baked garlic bread with herbs.</p>
+                    <div class="price">Rs. 100</div>
+                    <button onclick="addToCart('Garlic Bread', 100)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="bakery">
+                    <img src="{{ url_for('static', filename='images/bakery7.jpg') }}" alt="Blueberry Muffin">
+                    <h3>Blueberry Muffin</h3>
+                    <p>Soft and fruity blueberry muffin.</p>
+                    <div class="price">Rs. 70</div>
+                    <button onclick="addToCart('Blueberry Muffin', 70)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="bakery">
+                    <img src="{{ url_for('static', filename='images/bakery8.jpg') }}" alt="Veg Puff">
+                    <h3>Veg Puff</h3>
+                    <p>Spicy vegetable stuffed puff pastry.</p>
+                    <div class="price">Rs. 40</div>
+                    <button onclick="addToCart('Veg Puff', 40)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="bakery">
+                    <img src="{{ url_for('static', filename='images/bakery9.jpg') }}" alt="Paneer Roll">
+                    <h3>Paneer Roll</h3>
+                    <p>Soft roll stuffed with spiced paneer filling.</p>
+                    <div class="price">Rs. 60</div>
+                    <button onclick="addToCart('Paneer Roll', 60)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="bakery">
+                    <img src="{{ url_for('static', filename='images/bakery10.jpg') }}" alt="Coconut Cookies">
+                    <h3>Coconut Cookies</h3>
+                    <p>Crunchy and sweet coconut cookies.</p>
+                    <div class="price">Rs. 120</div>
+                    <button onclick="addToCart('Coconut Cookies', 120)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="bakery">
+                    <img src="{{ url_for('static', filename='images/bakery11.jpg') }}" alt="Plain Croissant">
+                    <h3>Plain Croissant</h3>
+                    <p>Flaky and buttery plain croissant.</p>
+                    <div class="price">Rs. 80</div>
+                    <button onclick="addToCart('Plain Croissant', 80)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="bakery">
+                    <img src="{{ url_for('static', filename='images/bakery12.jpg') }}" alt="Veg Pizza">
+                    <h3>Veg Pizza</h3>
+                    <p>Delicious vegetarian pizza with fresh toppings.</p>
+                    <div class="price">Rs. 200</div>
+                    <button onclick="addToCart('Veg Pizza', 200)">Add to Cart</button>
+                </div>
+                
+                <!-- Add 10 more products for the bakery category here -->
+
+                <!-- Products for Canned Goods Category -->
+                <div class="product" data-category="canned">
+                    <img src="{{ url_for('static', filename='images/canned1.jpg') }}" alt="Tomato Soup">
+                    <h3>Tomato Soup</h3>
+                    <p>Rich and tangy tomato soup.</p>
+                    <div class="price">Rs. 80</div>
+                    <button onclick="addToCart('Tomato Soup', 80)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="canned">
+                    <img src="{{ url_for('static', filename='images/canned2.jpg') }}" alt="Baked Beans">
+                    <h3>Baked Beans</h3>
+                    <p>Delicious and healthy baked beans in tomato sauce.</p>
+                    <div class="price">Rs. 70</div>
+                    <button onclick="addToCart('Baked Beans', 70)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="canned">
+                    <img src="{{ url_for('static', filename='images/canned3.jpg') }}" alt="Sweet Corn">
+                    <h3>Sweet Corn</h3>
+                    <p>Sweet and juicy canned sweet corn.</p>
+                    <div class="price">Rs. 60</div>
+                    <button onclick="addToCart('Sweet Corn', 60)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="canned">
+                    <img src="{{ url_for('static', filename='images/canned4.jpg') }}" alt="Green Peas">
+                    <h3>Green Peas</h3>
+                    <p>Fresh and tender green peas in a can.</p>
+                    <div class="price">Rs. 50</div>
+                    <button onclick="addToCart('Green Peas', 50)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="canned">
+                    <img src="{{ url_for('static', filename='images/canned5.jpg') }}" alt="Mushroom Soup">
+                    <h3>Mushroom Soup</h3>
+                    <p>Earthy and creamy mushroom soup.</p>
+                    <div class="price">Rs. 90</div>
+                    <button onclick="addToCart('Mushroom Soup', 90)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="canned">
+                    <img src="{{ url_for('static', filename='images/canned6.jpg') }}" alt="Mixed Vegetables">
+                    <h3>Mixed Vegetables</h3>
+                    <p>A mix of fresh and healthy vegetables in a can.</p>
+                    <div class="price">Rs. 70</div>
+                    <button onclick="addToCart('Mixed Vegetables', 70)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="canned">
+                    <img src="{{ url_for('static', filename='images/canned7.jpg') }}" alt="Pumpkin Puree">
+                    <h3>Pumpkin Puree</h3>
+                    <p>Smooth and creamy pumpkin puree.</p>
+                    <div class="price">Rs. 100</div>
+                    <button onclick="addToCart('Pumpkin Puree', 100)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="canned">
+                    <img src="{{ url_for('static', filename='images/canned8.jpg') }}" alt="Spinach">
+                    <h3>Spinach</h3>
+                    <p>Healthy and nutritious canned spinach.</p>
+                    <div class="price">Rs. 60</div>
+                    <button onclick="addToCart('Spinach', 60)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="canned">
+                    <img src="{{ url_for('static', filename='images/canned9.jpg') }}" alt="Tomato Puree">
+                    <h3>Tomato Puree</h3>
+                    <p>Rich and smooth tomato puree.</p>
+                    <div class="price">Rs. 40</div>
+                    <button onclick="addToCart('Tomato Puree', 40)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="canned">
+                    <img src="{{ url_for('static', filename='images/canned10.jpg') }}" alt="Chickpeas">
+                    <h3>Chickpeas</h3>
+                    <p>Protein-packed and flavorful chickpeas.</p>
+                    <div class="price">Rs. 55</div>
+                    <button onclick="addToCart('Chickpeas', 55)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="canned">
+                    <img src="{{ url_for('static', filename='images/canned11.jpg') }}" alt="Kidney Beans">
+                    <h3>Kidney Beans</h3>
+                    <p>Nutritious and hearty kidney beans.</p>
+                    <div class="price">Rs. 65</div>
+                    <button onclick="addToCart('Kidney Beans', 65)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="canned">
+                    <img src="{{ url_for('static', filename='images/canned12.jpg') }}" alt="Canned Mango Pulp">
+                    <h3>Canned Mango Pulp</h3>
+                    <p>Sweet and flavorful mango pulp in a can.</p>
+                    <div class="price">Rs. 120</div>
+                    <button onclick="addToCart('Canned Mango Pulp', 120)">Add to Cart</button>
+                </div>
+                
+                <!-- Add 10 more products for the canned goods category here -->
+
+                <!-- Products for Frozen Foods Category -->
+                <div class="product" data-category="frozen">
+                    <img src="{{ url_for('static', filename='images/frozen1.jpg') }}" alt="McCain Aloo Tikki">
+                    <h3>McCain Aloo Tikki</h3>
+                    <p>Delicious and crispy Aloo Tikki.</p>
+                    <div class="price">Rs. 120</div>
+                    <button onclick="addToCart('McCain Aloo Tikki', 120)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="frozen">
+                    <img src="{{ url_for('static', filename='images/frozen2.jpg') }}" alt="McCain French Fries">
+                    <h3>McCain French Fries</h3>
+                    <p>Golden and crispy French Fries.</p>
+                    <div class="price">Rs. 150</div>
+                    <button onclick="addToCart('McCain French Fries', 150)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="frozen">
+                    <img src="{{ url_for('static', filename='images/frozen3.jpg') }}" alt="McCain Smiles">
+                    <h3>McCain Smiles</h3>
+                    <p>Fun and crispy potato snacks.</p>
+                    <div class="price">Rs. 110</div>
+                    <button onclick="addToCart('McCain Smiles', 110)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="frozen">
+                    <img src="{{ url_for('static', filename='images/frozen4.jpg') }}" alt="McCain Veggie Nuggets">
+                    <h3>McCain Veggie Nuggets</h3>
+                    <p>Healthy and crispy vegetable nuggets.</p>
+                    <div class="price">Rs. 180</div>
+                    <button onclick="addToCart('McCain Veggie Nuggets', 180)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="frozen">
+                    <img src="{{ url_for('static', filename='images/frozen5.jpg') }}" alt="McCain Cheese Corn Nuggets">
+                    <h3>McCain Cheese Corn Nuggets</h3>
+                    <p>Creamy and cheesy corn nuggets.</p>
+                    <div class="price">Rs. 170</div>
+                    <button onclick="addToCart('McCain Cheese Corn Nuggets', 170)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="frozen">
+                    <img src="{{ url_for('static', filename='images/frozen6.jpg') }}" alt="Sumeru Frozen Paratha">
+                    <h3>Sumeru Frozen Paratha</h3>
+                    <p>Soft and tasty frozen parathas.</p>
+                    <div class="price">Rs. 90</div>
+                    <button onclick="addToCart('Sumeru Frozen Paratha', 90)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="frozen">
+                    <img src="{{ url_for('static', filename='images/frozen7.jpg') }}" alt="McCain Chilli Garlic Potato Bites">
+                    <h3>McCain Chilli Garlic Potato Bites</h3>
+                    <p>Spicy and flavorful potato bites.</p>
+                    <div class="price">Rs. 160</div>
+                    <button onclick="addToCart('McCain Chilli Garlic Potato Bites', 160)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="frozen">
+                    <img src="{{ url_for('static', filename='images/frozen8.jpg') }}" alt="McCain Veggie Burger Patty">
+                    <h3>McCain Veggie Burger Patty</h3>
+                    <p>Crispy and healthy veggie burger patties.</p>
+                    <div class="price">Rs. 140</div>
+                    <button onclick="addToCart('McCain Veggie Burger Patty', 140)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="frozen">
+                    <img src="{{ url_for('static', filename='images/frozen9.jpg') }}" alt="Safal Frozen Peas">
+                    <h3>Safal Frozen Peas</h3>
+                    <p>Fresh and tender frozen green peas.</p>
+                    <div class="price">Rs. 100</div>
+                    <button onclick="addToCart('Safal Frozen Peas', 100)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="frozen">
+                    <img src="{{ url_for('static', filename='images/frozen10.jpg') }}" alt="ITC Master Chef Harabhara Kebab">
+                    <h3>ITC Master Chef Harabhara Kebab</h3>
+                    <p>Delicious and healthy frozen Harabhara Kebabs.</p>
+                    <div class="price">Rs. 190</div>
+                    <button onclick="addToCart('ITC Master Chef Harabhara Kebab', 190)">Add to Cart</button>
+                </div>
+                <div class="product" data-category="frozen">
+                    <img src="{{ url_for('static', filename='images/frozen11.jpg') }}" alt="McCain Veggie Fingers">
+                    <h3>McCain Veggie Fingers</h3>
+                    <p>Crunchy and healthy veggie fingers.</p>
+                    <div class="price">Rs. 140</div>
+                    <button onclick="addToCart('McCain Veggie Fingers', 140)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="frozen">
+                    <img src="{{ url_for('static', filename='images/frozen12.jpg') }}" alt="McCain Masala Fries">
+                    <h3>McCain Masala Fries</h3>
+                    <p>Spicy and crispy masala fries.</p>
+                    <div class="price">Rs. 160</div>
+                    <button onclick="addToCart('McCain Masala Fries', 160)">Add to Cart</button>
+                </div>
+                
+                
+                <!-- Add 10 more products for the frozen foods category here -->
+
+                <!-- Products for Beverages Category -->
+                <div class="product" data-category="beverages">
+                    <img src="{{ url_for('static', filename='images/beverage1.jpg') }}" alt="Frooti">
+                    <h3>Frooti</h3>
+                    <p>Refreshing mango drink.</p>
+                    <div class="price">Rs. 35</div>
+                    <button onclick="addToCart('Frooti', 35)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="beverages">
+                    <img src="{{ url_for('static', filename='images/beverage2.jpg') }}" alt="Slice">
+                    <h3>Slice</h3>
+                    <p>Delicious mango beverage.</p>
+                    <div class="price">Rs. 40</div>
+                    <button onclick="addToCart('Slice', 40)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="beverages">
+                    <img src="{{ url_for('static', filename='images/beverage3.jpg') }}" alt="Maaza">
+                    <h3>Maaza</h3>
+                    <p>Rich mango flavor drink.</p>
+                    <div class="price">Rs. 45</div>
+                    <button onclick="addToCart('Maaza', 45)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="beverages">
+                    <img src="{{ url_for('static', filename='images/beverage4.jpg') }}" alt="Paper Boat">
+                    <h3>Paper Boat Aamras</h3>
+                    <p>Refreshing traditional drink.</p>
+                    <div class="price">Rs. 30</div>
+                    <button onclick="addToCart('Paper Boat Aamras', 30)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="beverages">
+                    <img src="{{ url_for('static', filename='images/beverage5.jpg') }}" alt="Bailley Packaged Drinking Water">
+                    <h3>Bailley Water</h3>
+                    <p>Pure and clean drinking water.</p>
+                    <div class="price">Rs. 20</div>
+                    <button onclick="addToCart('Bailley Water', 20)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="beverages">
+                    <img src="{{ url_for('static', filename='images/beverage6.jpg') }}" alt="Campa Cola">
+                    <h3>Campa Cola</h3>
+                    <p>Classic Indian cola.</p>
+                    <div class="price">Rs. 35</div>
+                    <button onclick="addToCart('Campa Cola', 35)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="beverages">
+                    <img src="{{ url_for('static', filename='images/beverage7.jpg') }}" alt="Limca">
+                    <h3>Limca</h3>
+                    <p>Lemon-flavored refreshing drink.</p>
+                    <div class="price">Rs. 40</div>
+                    <button onclick="addToCart('Limca', 40)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="beverages">
+                    <img src="{{ url_for('static', filename='images/beverage8.jpg') }}" alt="Appy Fizz">
+                    <h3>Appy Fizz</h3>
+                    <p>Sparkling apple drink.</p>
+                    <div class="price">Rs. 45</div>
+                    <button onclick="addToCart('Appy Fizz', 45)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="beverages">
+                    <img src="{{ url_for('static', filename='images/beverage9.jpg') }}" alt="Tata Gluco Plus">
+                    <h3>Tata Gluco Plus</h3>
+                    <p>Energy drink with glucose.</p>
+                    <div class="price">Rs. 15</div>
+                    <button onclick="addToCart('Tata Gluco Plus', 15)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="beverages">
+                    <img src="{{ url_for('static', filename='images/beverage10.jpg') }}" alt="Bovonto">
+                    <h3>Bovonto</h3>
+                    <p>Unique grape-flavored soda.</p>
+                    <div class="price">Rs. 25</div>
+                    <button onclick="addToCart('Bovonto', 25)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="beverages">
+                    <img src="{{ url_for('static', filename='images/beverage11.jpg') }}" alt="Rasna">
+                    <h3>Rasna</h3>
+                    <p>Fruit-flavored beverage mix.</p>
+                    <div class="price">Rs. 20</div>
+                    <button onclick="addToCart('Rasna', 20)">Add to Cart</button>
+                </div>
+                
+                <div class="product" data-category="beverages">
+                    <img src="{{ url_for('static', filename='images/beverage12.jpg') }}" alt="Frooti Fizz">
+                    <h3>Frooti Fizz</h3>
+                    <p>Carbonated mango drink.</p>
+                    <div class="price">Rs. 50</div>
+                    <button onclick="addToCart('Frooti Fizz', 50)">Add to Cart</button>
+                </div>
+                
+                <!-- Add 10 more products for the beverages category here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filterProducts(category) {
+            var products = document.querySelectorAll('.product');
+
+            products.forEach(function(product) {
+                if (category === 'all' || product.getAttribute('data-category') === category) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+
+        function addToCart(name, price) {
+            // Send product data to the server
+            fetch('/add_to_cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: name, price: price })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Product added to cart!');
+                } else {
+                    alert('Failed to add product to cart.');
+                }
+            });
+        }
+
+        // Initial display of all products
+        filterProducts('all');
+    </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+Flask
+Flask-PyMongo
+Werkzeug
+razorpay
+pymongo
+dnspython

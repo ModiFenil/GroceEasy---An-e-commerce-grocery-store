@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color:#5A20CB; /* Dark purple to light pink gradient */
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .nav-links {
+            display: flex;
+        }
+
+        .navbar .brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+       
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 0; /* Remove space between nav links */
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            margin-left: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #ddd;
+        }
+
+        /* Cart Page Specific Styles */
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            position: relative;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .cart-item .details {
+            flex-grow: 1;
+            margin-left: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-item h4 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .cart-item .price {
+            color: #28a745;
+            font-size: 18px;
+            margin-left: 20px;
+        }
+
+        .remove-button {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background-color: #e91e63;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .remove-button:hover {
+            background-color: #c2185b;
+        }
+
+        .total {
+            text-align: right;
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .checkout-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #e91e63;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout-button:hover {
+            background-color: #c2185b;
+        }
+
+        .empty-cart {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="brand">GroceEasy</div>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('products') }}">Products</a>
+            <a href="{{ url_for('cart') }}">Cart</a>
+            <a href="{{ url_for('purchase_history') }}">Order History</a>
+            <a href="{{ url_for('user') }}">Profile</a>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Your Cart</h2>
+
+        {% if cart %}
+            {% for item in cart %}
+            <div class="cart-item" data-id="{{ item.id }}">
+                <div class="details">
+                    <div>
+                        <h4>{{ item.name }}</h4>
+                        <p>{{ item.description }}</p>
+                    </div>
+                    <div class="price">Rs. {{ item.price }}</div>
+                </div>
+                <button class="remove-button" onclick="removeItem('{{ item.id }}')">Remove</button>
+            </div>
+            {% endfor %}
+
+            <div class="total">
+                Total: Rs. {{ cart | sum(attribute='price') }}
+            </div>
+
+            <a href="{{ url_for('checkout') }}" class="checkout-button">Checkout</a>
+        {% else %}
+            <p class="empty-cart">Your cart is empty.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        function removeItem(itemId) {
+            fetch('{{ url_for('remove_item') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ itemId: itemId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove the item from the DOM
+                    const itemElement = document.querySelector(`.cart-item[data-id="${itemId}"]`);
+                    if (itemElement) {
+                        itemElement.remove();
+                    }
+                    
+                    // Update total price
+                    const total = data.cart.reduce((acc, item) => acc + item.price, 0);
+                    document.querySelector('.total').textContent = `Total: Rs. ${total}`;
+                    
+                    // Show empty cart message if cart is empty
+                    if (data.cart.length === 0) {
+                        document.querySelector('.empty-cart').style.display = 'block';
+                    }
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
